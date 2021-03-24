@@ -17,13 +17,11 @@ The brightest, hippest, coolest router for Flutter.
 - Follows `beta` Flutter channel
 - Null-safety
 
-## Example Project
 
-There is a pretty sweet example project in the `example` folder. Check it out. Otherwise, keep reading to get up and running.
 
 ## Getting started
 
-First, you should define a new `FluroRouter` object by initializing it as such:
+First, you should define a new `NavTracker` object by initializing it as such:
 
 ```dart
    return MaterialApp(
@@ -55,8 +53,8 @@ the value `1234` as a parameter to that screen.
 
 ## Navigating
 
-You can use `FluroRouter` with the `MaterialApp.onGenerateRoute` parameter
-via `FluroRouter.generator`. To do so, pass the function reference to
+You can use `NavTracker` with the `MaterialApp.onGenerateRoute` parameter
+via `NavTracker.generator`. To do so, pass the function reference to
 the `onGenerate` parameter like: `onGenerateRoute: router.generator`.
 
 You can then use `Navigator.push` and the flutter routing mechanism will match the routes
@@ -72,7 +70,7 @@ NavTracker.I.toNamed("/users/1234");
 
 Don't want to use strings for params? No worries.
 
-After pushing a route with a custom `RouteSettings` you can use the `BuildContext.settings` extension to extract the settings. Typically this would be done in `Handler.handlerFunc` so you can pass `RouteSettings.arguments` to your screen widgets.
+After pushing a route with a custom `RouteSettings` you can use the `BuildContext.settings` extension to extract the settings. Typically this would be done in `Handler.handlerFunc` so you can pass `arguments` to your screen widgets.
 
 ```dart
 /// Push a route with custom RouteSettings if you don't want to use path arguments
