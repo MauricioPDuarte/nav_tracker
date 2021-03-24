@@ -1,5 +1,8 @@
-This package is based on codes from the package Fluro https://github.com/lukepighetti/fluro 
-But is optimized to navigation without context
+## NavTracker is based on codes from the package Fluro 
+ 
+### But is optimized to navigation without context
+
+Fluro github: https://github.com/lukepighetti/fluro
 
 The brightest, hippest, coolest router for Flutter.
 
@@ -23,7 +26,14 @@ There is a pretty sweet example project in the `example` folder. Check it out. O
 First, you should define a new `FluroRouter` object by initializing it as such:
 
 ```dart
-final router = FluroRouter();
+   return MaterialApp(
+      title: 'Flutter Demo',
+      navigatorKey: NavTracker.I.navKey,
+      home: Tela1(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+    );
 ```
 
 It may be convenient for you to store the router globally/statically so that
@@ -32,15 +42,10 @@ you can access the router in other areas in your application.
 After instantiating the router, you will need to define your routes and your route handlers:
 
 ```dart
-var usersHandler = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-  return UsersScreen(params["id"][0]);
-});
-
-void defineRoutes(FluroRouter router) {
-  router.define("/users/:id", handler: usersHandler);
-
-  // it is also possible to define the route transition to use
-  // router.define("users/:id", handler: usersHandler, transitionType: TransitionType.inFromLeft);
+void defineRoutes() {
+   NavTracker.I.define("user/:id", handler: Handler(bind: (params, args) {
+      return UsersScreen(params, args);
+    }), transitionType: TransitionType.inFromRight);
 }
 ```
 
@@ -60,7 +65,7 @@ for you.
 You can also manually push to a route yourself. To do so:
 
 ```dart
-router.navigateTo(context, "/users/1234", transition: TransitionType.fadeIn);
+NavTracker.I.toNamed("/users/1234");
 ```
 
 ## Class arguments
@@ -70,20 +75,16 @@ Don't want to use strings for params? No worries.
 After pushing a route with a custom `RouteSettings` you can use the `BuildContext.settings` extension to extract the settings. Typically this would be done in `Handler.handlerFunc` so you can pass `RouteSettings.arguments` to your screen widgets.
 
 ```dart
-/// Push a route with custom RouteSettings if you don't want to use path params
-FluroRouter.appRouter.navigateTo(
-  context,
+/// Push a route with custom RouteSettings if you don't want to use path arguments
+NavTracker.I.toNamed(
   'home',
-  routeSettings: RouteSettings(
-    arguments: MyArgumentsDataClass('foo!'),
-  ),
+  arguments: {"test": 5598745},
 );
 
 /// Extract the arguments using [BuildContext.settings.arguments] or [BuildContext.arguments] for short
 var homeHandler = Handler(
-  handlerFunc: (context, params) {
-    final args = context.settings.arguments as MyArgumentsDataClass;
-
+  handlerFunc: (params, arguments) {
+    final args = arguments;
     return HomeComponent(args);
   },
 );
