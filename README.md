@@ -54,8 +54,8 @@ the value `1234` as a parameter to that screen.
 ## Navigating
 
 You can use `NavTracker` with the `MaterialApp.onGenerateRoute` parameter
-via `NavTracker.generator`. To do so, pass the function reference to
-the `onGenerate` parameter like: `onGenerateRoute: router.generator`.
+via `NavTracker.I.generator`. To do so, pass the function reference to
+the `onGenerate` parameter like: `onGenerateRoute: NavTracker.I.generator`.
 
 You can then use `Navigator.push` and the flutter routing mechanism will match the routes
 for you.
@@ -68,9 +68,7 @@ NavTracker.I.toNamed("/users/1234");
 
 ## Class arguments
 
-Don't want to use strings for params? No worries.
-
-After pushing a route with a custom `RouteSettings` you can use the `BuildContext.settings` extension to extract the settings. Typically this would be done in `Handler.handlerFunc` so you can pass `arguments` to your screen widgets.
+After pushing a route with a custom `arguments`. You can get arguments on second parameter from `Handler.bind` callback. 
 
 ```dart
 /// Push a route with custom RouteSettings if you don't want to use path arguments
@@ -79,9 +77,9 @@ NavTracker.I.toNamed(
   arguments: {"test": 5598745},
 );
 
-/// Extract the arguments using [BuildContext.settings.arguments] or [BuildContext.arguments] for short
+/// Extract the arguments using [arguments]
 var homeHandler = Handler(
-  handlerFunc: (params, arguments) {
+  bind: (params, arguments) {
     final args = arguments;
     return HomeComponent(args);
   },
