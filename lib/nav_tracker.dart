@@ -172,6 +172,7 @@ class NavTracker {
       bool maintainState = true,
       bool rootNavigator = false,
       dynamic? arguments,
+      BuildContext? ctx,
       TransitionType? transition,
       Duration? transitionDuration,
       RouteTransitionsBuilder? transitionBuilder,
@@ -182,6 +183,7 @@ class NavTracker {
         clearStack: clearStack,
         maintainState: maintainState,
         rootNavigator: rootNavigator,
+        ctx: ctx,
         transition: transition,
         transitionDuration: transitionDuration,
         transitionBuilder: transitionBuilder,
@@ -194,6 +196,7 @@ class NavTracker {
       bool maintainState = true,
       bool rootNavigator = false,
       dynamic? arguments,
+      BuildContext? ctx,
       TransitionType? transition,
       Duration? transitionDuration,
       RouteTransitionsBuilder? transitionBuilder,
@@ -216,7 +219,7 @@ class NavTracker {
         route = _notFoundRoute(path, maintainState: maintainState);
       }
       if (route != null) {
-        final navigator = Navigator.of(_navigatorKey.currentContext!,
+        final navigator = Navigator.of((ctx ?? _navigatorKey.currentContext)!,
             rootNavigator: rootNavigator);
         if (clearStack) {
           future = navigator.pushAndRemoveUntil(route, (check) => false);

@@ -71,7 +71,7 @@ NavTracker.I.toNamed("/users/1234");
 After pushing a route with a custom `arguments`. You can get arguments on second parameter from `Handler.bind` callback. 
 
 ```dart
-/// Push a route with custom RouteSettings if you don't want to use path arguments
+/// Push a route with custom arguments.
 NavTracker.I.toNamed(
   'home',
   arguments: {"test": 5598745},
