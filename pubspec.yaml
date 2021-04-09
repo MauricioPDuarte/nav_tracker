@@ -1,6 +1,6 @@
 name: nav_tracker
 description: Navigation router without context.
-version: 1.0.2
+version: 1.0.4
 homepage: https://github.com/michaelopes/nav_tracker
 
 environment:

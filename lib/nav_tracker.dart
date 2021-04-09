@@ -18,6 +18,9 @@ class NavTracker {
   static NavTracker get instance => _instance;
   static NavTracker get I => _instance;
 
+  bool _inTest = false;
+  set inTest(bool v) => _inTest = v;
+
   GlobalKey<NavigatorState> get navKey => _navigatorKey;
 
   /// The default transition duration to use throughout Fluro
@@ -201,6 +204,14 @@ class NavTracker {
       Duration? transitionDuration,
       RouteTransitionsBuilder? transitionBuilder,
       RouteSettings? routeSettings}) {
+    if (_inTest) {
+      final navigatorTest = Navigator.of((ctx ?? _navigatorKey.currentContext)!,
+          rootNavigator: rootNavigator);
+      return (replace
+          ? navigatorTest.pushReplacementNamed(path)
+          : navigatorTest.pushNamed(path));
+    }
+
     RouteMatch routeMatch = matchRoute(path,
         transitionType: transition,
         transitionsBuilder: transitionBuilder,
@@ -282,6 +293,12 @@ class NavTracker {
       Navigator.of(_navigatorKey.currentContext!).pop(result);
 
   Route<dynamic>? generator(RouteSettings routeSettings) {
+    if (_inTest) {
+      return new MaterialPageRoute(
+        builder: (context) => Container(),
+        settings: routeSettings,
+      );
+    }
     RouteMatch match =
         matchRoute(routeSettings.name, routeSettings: routeSettings);
     return match.route;

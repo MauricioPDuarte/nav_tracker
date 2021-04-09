@@ -1,3 +1,6 @@
+## 1.0.4
+- Implement in test option
+
 ## 1.0.3
 - Implement optional context on navigation
 
