@@ -73,8 +73,8 @@ class NavTracker {
     if (transitionDuration == null && route?.transitionDuration != null) {
       transitionDuration = route?.transitionDuration;
     }
-
-    Handler handler = (route != null ? route.handler : notFoundHandler);
+    //Atualização 1.0.5
+    Handler? handler = (route != null ? route.handler : notFoundHandler);
     TransitionType? transition = transitionType;
     if (transitionType == null) {
       transition = route != null ? route.transitionType : TransitionType.native;
@@ -87,8 +87,8 @@ class NavTracker {
     Map<String, List<String>> parameters =
         match?.parameters ?? <String, List<String>>{};
 
-    if (handler.type == HandlerType.function) {
-      handler.bind(parameters, arguments);
+    if (handler?.type == HandlerType.function) {
+      handler?.bind(parameters, arguments);
       return RouteMatch(matchType: RouteMatchType.nonVisual);
     }
 
@@ -102,7 +102,7 @@ class NavTracker {
             fullscreenDialog: transition == TransitionType.nativeModal,
             maintainState: maintainState,
             builder: (BuildContext context) {
-              return handler.bind(parameters, arguments) ?? SizedBox.shrink();
+              return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
             });
       } else if (transition == TransitionType.material ||
           transition == TransitionType.materialFullScreenDialog) {
@@ -112,7 +112,7 @@ class NavTracker {
                 transition == TransitionType.materialFullScreenDialog,
             maintainState: maintainState,
             builder: (BuildContext context) {
-              return handler.bind(parameters, arguments) ?? SizedBox.shrink();
+              return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
             });
       } else if (transition == TransitionType.cupertino ||
           transition == TransitionType.cupertinoFullScreenDialog) {
@@ -122,7 +122,7 @@ class NavTracker {
                 transition == TransitionType.cupertinoFullScreenDialog,
             maintainState: maintainState,
             builder: (BuildContext context) {
-              return handler.bind(parameters, arguments) ?? SizedBox.shrink();
+              return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
             });
       } else {
         RouteTransitionsBuilder? routeTransitionsBuilder;
@@ -139,7 +139,7 @@ class NavTracker {
           maintainState: maintainState,
           pageBuilder: (BuildContext context, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return handler.bind(parameters, arguments) ?? SizedBox.shrink();
+            return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
           },
           transitionDuration: transition == TransitionType.none
               ? Duration.zero
