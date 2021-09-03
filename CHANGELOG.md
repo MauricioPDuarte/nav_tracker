@@ -1,3 +1,6 @@
+## 1.0.6
+- Add popUntil
+
 ## 1.0.5
 - Bug fixes
 

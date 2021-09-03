@@ -288,6 +288,10 @@ class NavTracker {
     };
   }
 
+  void popUntil(bool Function(Route<dynamic>) predicate) {
+    Navigator.of(_navigatorKey.currentContext!).popUntil(predicate);
+  }
+
   /// Similar to [Navigator.pop]
   void pop<T>([T? result]) =>
       Navigator.of(_navigatorKey.currentContext!).pop(result);
