@@ -67,6 +67,8 @@ class RouteTree {
   final List<RouteTreeNode> _nodes = <RouteTreeNode>[];
   bool _hasDefaultRoute = false;
 
+  RouteTreeNode get lastNode => _nodes.last;
+
   // addRoute - add a route to the route tree
   void addRoute(AppRoute route) {
     String path = route.route;

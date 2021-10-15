@@ -60,7 +60,7 @@ class NavTracker {
       TransitionType? transitionType,
       Duration? transitionDuration,
       RouteTransitionsBuilder? transitionsBuilder,
-      dynamic? arguments,
+      dynamic arguments,
       bool maintainState = true}) {
     RouteSettings settingsToUse = routeSettings ?? RouteSettings(name: path);
 
@@ -92,8 +92,9 @@ class NavTracker {
       return RouteMatch(matchType: RouteMatchType.nonVisual);
     }
 
+    var resultHanders = handler?.bind(parameters, arguments);
     RouteCreator creator = (RouteSettings? routeSettings,
-        Map<String, List<String>> parameters, dynamic? arguments) {
+        Map<String, List<String>> parameters, dynamic arguments) {
       bool isNativeTransition = (transition == TransitionType.native ||
           transition == TransitionType.nativeModal);
       if (isNativeTransition) {
@@ -102,7 +103,7 @@ class NavTracker {
             fullscreenDialog: transition == TransitionType.nativeModal,
             maintainState: maintainState,
             builder: (BuildContext context) {
-              return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
+              return resultHanders ?? SizedBox.shrink();
             });
       } else if (transition == TransitionType.material ||
           transition == TransitionType.materialFullScreenDialog) {
@@ -112,7 +113,7 @@ class NavTracker {
                 transition == TransitionType.materialFullScreenDialog,
             maintainState: maintainState,
             builder: (BuildContext context) {
-              return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
+              return resultHanders ?? SizedBox.shrink();
             });
       } else if (transition == TransitionType.cupertino ||
           transition == TransitionType.cupertinoFullScreenDialog) {
@@ -122,7 +123,7 @@ class NavTracker {
                 transition == TransitionType.cupertinoFullScreenDialog,
             maintainState: maintainState,
             builder: (BuildContext context) {
-              return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
+              return resultHanders ?? SizedBox.shrink();
             });
       } else {
         RouteTransitionsBuilder? routeTransitionsBuilder;
@@ -139,7 +140,7 @@ class NavTracker {
           maintainState: maintainState,
           pageBuilder: (BuildContext context, Animation<double> animation,
               Animation<double> secondaryAnimation) {
-            return handler?.bind(parameters, arguments) ?? SizedBox.shrink();
+            return resultHanders ?? SizedBox.shrink();
           },
           transitionDuration: transition == TransitionType.none
               ? Duration.zero
@@ -174,7 +175,7 @@ class NavTracker {
       {bool clearStack = false,
       bool maintainState = true,
       bool rootNavigator = false,
-      dynamic? arguments,
+      dynamic arguments,
       BuildContext? ctx,
       TransitionType? transition,
       Duration? transitionDuration,
@@ -198,7 +199,7 @@ class NavTracker {
       bool clearStack = false,
       bool maintainState = true,
       bool rootNavigator = false,
-      dynamic? arguments,
+      dynamic arguments,
       BuildContext? ctx,
       TransitionType? transition,
       Duration? transitionDuration,
@@ -288,9 +289,8 @@ class NavTracker {
     };
   }
 
-  void popUntil(bool Function(Route<dynamic>) predicate) {
-    Navigator.of(_navigatorKey.currentContext!).popUntil(predicate);
-  }
+  void popUntil(bool Function(Route<dynamic>) predicate) =>
+      Navigator.of(_navigatorKey.currentContext!).popUntil(predicate);
 
   /// Similar to [Navigator.pop]
   void pop<T>([T? result]) =>
