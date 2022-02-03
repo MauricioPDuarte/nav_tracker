@@ -251,6 +251,11 @@ class NavTracker {
     return future;
   }
 
+  void toNamedAndRemoveUntil(
+          String route, bool Function(Route<dynamic>) predicate) =>
+      Navigator.of(_navigatorKey.currentContext!)
+          .pushNamedAndRemoveUntil(route, predicate);
+
   RouteTransitionsBuilder _standardTransitionsBuilder(
       TransitionType? transitionType) {
     return (BuildContext context, Animation<double> animation,
