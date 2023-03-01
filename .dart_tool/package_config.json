@@ -131,10 +131,10 @@
       "name": "nav_tracker",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.14"
     }
   ],
-  "generated": "2022-02-03T13:15:08.869979Z",
+  "generated": "2023-03-01T20:51:34.242655Z",
   "generator": "pub",
   "generatorVersion": "2.14.3"
 }
