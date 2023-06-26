@@ -11,8 +11,7 @@ import 'imports/tree.dart';
 class NavTracker {
   NavTracker._privateConstructor();
 
-  static final GlobalKey<NavigatorState> _navigatorKey =
-      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   static final NavTracker _instance = NavTracker._privateConstructor();
   static NavTracker get instance => _instance;
@@ -35,15 +34,12 @@ class NavTracker {
       RouteTransitionsBuilder? transitionBuilder}) {
     _routeTree.addRoute(
       AppRoute(routePath, handler,
-          transitionType: transitionType,
-          transitionDuration: transitionDuration,
-          transitionBuilder: transitionBuilder),
+          transitionType: transitionType, transitionDuration: transitionDuration, transitionBuilder: transitionBuilder),
     );
   }
 
   Route<Null> _notFoundRoute(String path, {bool? maintainState}) {
-    RouteCreator<Null> creator = (RouteSettings? routeSettings,
-        Map<String, List<String>> parameters, args) {
+    RouteCreator<Null> creator = (RouteSettings? routeSettings, Map<String, List<String>> parameters, args) {
       return MaterialPageRoute<Null>(
           settings: routeSettings,
           maintainState: maintainState ?? true,
@@ -65,7 +61,7 @@ class NavTracker {
     RouteSettings settingsToUse = routeSettings ?? RouteSettings(name: path);
 
     if (settingsToUse.name == null) {
-      settingsToUse = settingsToUse.copyWith(name: path);
+      settingsToUse = RouteSettings(name: path);
     }
     AppRouteMatch? match = _routeTree.matchRoute(path!);
     AppRoute? route = match?.route;
@@ -80,12 +76,9 @@ class NavTracker {
       transition = route != null ? route.transitionType : TransitionType.native;
     }
     if (route == null && notFoundHandler == null) {
-      return RouteMatch(
-          matchType: RouteMatchType.noMatch,
-          errorMessage: "No matching route was found");
+      return RouteMatch(matchType: RouteMatchType.noMatch, errorMessage: "No matching route was found");
     }
-    Map<String, List<String>> parameters =
-        match?.parameters ?? <String, List<String>>{};
+    Map<String, List<String>> parameters = match?.parameters ?? <String, List<String>>{};
 
     if (handler?.type == HandlerType.function) {
       handler?.bind(parameters, arguments);
@@ -93,10 +86,8 @@ class NavTracker {
     }
 
     var resultHanders = handler?.bind(parameters, arguments);
-    RouteCreator creator = (RouteSettings? routeSettings,
-        Map<String, List<String>> parameters, dynamic arguments) {
-      bool isNativeTransition = (transition == TransitionType.native ||
-          transition == TransitionType.nativeModal);
+    RouteCreator creator = (RouteSettings? routeSettings, Map<String, List<String>> parameters, dynamic arguments) {
+      bool isNativeTransition = (transition == TransitionType.native || transition == TransitionType.nativeModal);
       if (isNativeTransition) {
         return MaterialPageRoute<dynamic>(
             settings: routeSettings,
@@ -105,22 +96,18 @@ class NavTracker {
             builder: (BuildContext context) {
               return resultHanders ?? SizedBox.shrink();
             });
-      } else if (transition == TransitionType.material ||
-          transition == TransitionType.materialFullScreenDialog) {
+      } else if (transition == TransitionType.material || transition == TransitionType.materialFullScreenDialog) {
         return MaterialPageRoute<dynamic>(
             settings: routeSettings,
-            fullscreenDialog:
-                transition == TransitionType.materialFullScreenDialog,
+            fullscreenDialog: transition == TransitionType.materialFullScreenDialog,
             maintainState: maintainState,
             builder: (BuildContext context) {
               return resultHanders ?? SizedBox.shrink();
             });
-      } else if (transition == TransitionType.cupertino ||
-          transition == TransitionType.cupertinoFullScreenDialog) {
+      } else if (transition == TransitionType.cupertino || transition == TransitionType.cupertinoFullScreenDialog) {
         return CupertinoPageRoute<dynamic>(
             settings: routeSettings,
-            fullscreenDialog:
-                transition == TransitionType.cupertinoFullScreenDialog,
+            fullscreenDialog: transition == TransitionType.cupertinoFullScreenDialog,
             maintainState: maintainState,
             builder: (BuildContext context) {
               return resultHanders ?? SizedBox.shrink();
@@ -129,8 +116,7 @@ class NavTracker {
         RouteTransitionsBuilder? routeTransitionsBuilder;
 
         if (transition == TransitionType.custom) {
-          routeTransitionsBuilder =
-              transitionsBuilder ?? route?.transitionBuilder;
+          routeTransitionsBuilder = transitionsBuilder ?? route?.transitionBuilder;
         } else {
           routeTransitionsBuilder = _standardTransitionsBuilder(transition);
         }
@@ -138,23 +124,17 @@ class NavTracker {
         return PageRouteBuilder<dynamic>(
           settings: routeSettings,
           maintainState: maintainState,
-          pageBuilder: (BuildContext context, Animation<double> animation,
-              Animation<double> secondaryAnimation) {
+          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
             return resultHanders ?? SizedBox.shrink();
           },
           transitionDuration: transition == TransitionType.none
               ? Duration.zero
-              : (transitionDuration ??
-                  route?.transitionDuration ??
-                  _defaultTransitionDuration),
+              : (transitionDuration ?? route?.transitionDuration ?? _defaultTransitionDuration),
           reverseTransitionDuration: transition == TransitionType.none
               ? Duration.zero
-              : (transitionDuration ??
-                  route?.transitionDuration ??
-                  _defaultTransitionDuration),
-          transitionsBuilder: transition == TransitionType.none
-              ? (_, __, ___, child) => child
-              : routeTransitionsBuilder!,
+              : (transitionDuration ?? route?.transitionDuration ?? _defaultTransitionDuration),
+          transitionsBuilder:
+              transition == TransitionType.none ? (_, __, ___, child) => child : routeTransitionsBuilder!,
         );
       }
     };
@@ -206,11 +186,8 @@ class NavTracker {
       RouteTransitionsBuilder? transitionBuilder,
       RouteSettings? routeSettings}) {
     if (_inTest) {
-      final navigatorTest = Navigator.of((ctx ?? _navigatorKey.currentContext)!,
-          rootNavigator: rootNavigator);
-      return (replace
-          ? navigatorTest.pushReplacementNamed(path)
-          : navigatorTest.pushNamed(path));
+      final navigatorTest = Navigator.of((ctx ?? _navigatorKey.currentContext)!, rootNavigator: rootNavigator);
+      return (replace ? navigatorTest.pushReplacementNamed(path) : navigatorTest.pushNamed(path));
     }
 
     RouteMatch routeMatch = matchRoute(path,
@@ -231,14 +208,11 @@ class NavTracker {
         route = _notFoundRoute(path, maintainState: maintainState);
       }
       if (route != null) {
-        final navigator = Navigator.of((ctx ?? _navigatorKey.currentContext)!,
-            rootNavigator: rootNavigator);
+        final navigator = Navigator.of((ctx ?? _navigatorKey.currentContext)!, rootNavigator: rootNavigator);
         if (clearStack) {
           future = navigator.pushAndRemoveUntil(route, (check) => false);
         } else {
-          future = replace
-              ? navigator.pushReplacement(route)
-              : navigator.push(route);
+          future = replace ? navigator.pushReplacement(route) : navigator.push(route);
         }
         completer.complete();
       } else {
@@ -251,15 +225,11 @@ class NavTracker {
     return future;
   }
 
-  void toNamedAndRemoveUntil(
-          String route, bool Function(Route<dynamic>) predicate) =>
-      Navigator.of(_navigatorKey.currentContext!)
-          .pushNamedAndRemoveUntil(route, predicate);
+  void toNamedAndRemoveUntil(String route, bool Function(Route<dynamic>) predicate) =>
+      Navigator.of(_navigatorKey.currentContext!).pushNamedAndRemoveUntil(route, predicate);
 
-  RouteTransitionsBuilder _standardTransitionsBuilder(
-      TransitionType? transitionType) {
-    return (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation, Widget child) {
+  RouteTransitionsBuilder _standardTransitionsBuilder(TransitionType? transitionType) {
+    return (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
       if (transitionType == TransitionType.fadeIn) {
         return FadeTransition(opacity: animation, child: child);
       } else {
@@ -298,8 +268,7 @@ class NavTracker {
       Navigator.of(_navigatorKey.currentContext!).popUntil(predicate);
 
   /// Similar to [Navigator.pop]
-  void pop<T>([T? result]) =>
-      Navigator.of(_navigatorKey.currentContext!).pop(result);
+  void pop<T>([T? result]) => Navigator.of(_navigatorKey.currentContext!).pop(result);
 
   Route<dynamic>? generator(RouteSettings routeSettings) {
     if (_inTest) {
@@ -308,8 +277,7 @@ class NavTracker {
         settings: routeSettings,
       );
     }
-    RouteMatch match =
-        matchRoute(routeSettings.name, routeSettings: routeSettings);
+    RouteMatch match = matchRoute(routeSettings.name, routeSettings: routeSettings);
     return match.route;
   }
 
